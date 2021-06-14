@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.conf.urls import url, include
+from vuedjango import views as lk
 from django.urls import path
-from vuedjango import views as py_view
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('vue-test', py_view.vue_test),
+ 
+urlpatterns = [ 
+    url(r'^api/vuedjango$', lk.tutorial_list),
+    url(r'^api/vuedjango/(?P<pk>[0-9]+)$', lk.tutorial_detail),
+    url(r'^api/vuedjango/published$', lk.tutorial_list_published),
+    path('vue-test', lk.vue_test)
 ]
