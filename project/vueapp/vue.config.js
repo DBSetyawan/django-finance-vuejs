@@ -8,4 +8,7 @@ module.exports = {
     devServer: {
         writeToDisk: true, // Write files to disk in dev mode, so Django can serve the assets
     },
+    devServer: {
+        proxy: 'http://127.0.0.1:8000'
+    }
 };
