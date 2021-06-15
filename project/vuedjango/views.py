@@ -14,7 +14,6 @@
 # from .models import *
 # from vuedjango import views
 # from django.http import JsonResponse, HttpResponse
-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -77,13 +76,17 @@ def register(request):
     elif request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            user = form.save(commit=False)
+            user.backend = "django.contrib.auth.backends.ModelBackend"
+            user.save()
             user = form.save()
             login(request, user)
-            return redirect(reverse("dashboard"))
+            # return redirect(reverse("dashboard"))
+        return render(request, 'users/register.html', {'form': form})
             
     # Create your views here.
-    # def vue_test(request):
-    #     return render(request, 'vuedjango/vuedjango.templates.vuedjango.ind.html')
+def vue_test(request):
+    return render(request, 'vuedjango/vuedjango.templates.vuedjango.ind.html')
 
     # @api_view(['GET', 'POST', 'DELETE'])
     # def tutorial_list(request):

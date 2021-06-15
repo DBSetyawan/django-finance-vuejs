@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import platform
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'vuedjango',
+    'social_django',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 ]
 CORS_ORIGIN_ALLOW_ALL = True
@@ -74,6 +78,7 @@ CORS_ALLOW_METHODS = [
 
 CORS_ORIGIN_WHITELIST = (
     'http://local-db.test',
+    'http://127.0.0.1:8000',
 )
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -85,14 +90,43 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+# GITHUB_OAUTH_CLIENT_ID = os.getenv('b3f1e05ad940114c0a49')
+# GITHUB_OAUTH_SECRET = os.getenv('8eb9c9dba203c522325a8dec123b504c9904979b')
+
+# GITHUB_OAUTH_CLIENT_ID = os.getenv('b3f1e05ad940114c0a49')
+# GITHUB_OAUTH_SECRET = os.getenv('8eb9c9dba203c522325a8dec123b504c9904979b')
+# GITHUB_OAUTH_CALLBACK_URL = os.getenv('http://127.0.0.1:8000/accounts/github/login/callback')
+SOCIAL_AUTH_GITHUB_KEY = 'b3f1e05ad940114c0a49'
+SOCIAL_AUTH_GITHUB_SECRET = '8eb9c9dba203c522325a8dec123b504c9904979b'
+SOCIAL_AUTH_GITHUB_SCOPE = ['email']
+SOCIAL_AUTH_GITHUB_PROFILE_EXTRA_PARAMS = { 'fields': 'id, username, email' }
+
+# GITHUB_OAUTH_SCOPES = []
+# AUTH_USER_MODEL = 'vuedjango.Account'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+SITE_ID = 1
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+         'DIRS': [BASE_DIR, 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,6 +134,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },

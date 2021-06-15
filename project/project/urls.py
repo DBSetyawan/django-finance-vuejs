@@ -19,13 +19,14 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from vuedjango.views import *
 
-# from django.urls import path
-from vuedjango import views as lk
+from django.urls import path
 from vuedjango.views import dashboard, register
-# from vuedjango.views import views as r
+from vuedjango import views as lk
  
 
 urlpatterns = [ 
+    # url(r"^oauth/", include("social_django.urls")),
+
     url(r'^$', index),
     url(r"^register/", register, name="register"),
     url(r"^accounts/", include("django.contrib.auth.urls")),
@@ -41,6 +42,13 @@ urlpatterns = [
     url(r'^conversations/(?P<id>[-\w]+)/delivered$',delivered),
     # url(r'^api/vuedjango$', lk.tutorial_list),
     # url(r'^api/vuedjango/(?P<pk>[0-9]+)$', lk.tutorial_detail),
-    # url(r'^api/vuedjango/published$', lk.tutorial_list_published),
-    # path('vue-test', lk.vue_test),
+    # url(r'^api/vuedjango/published$', lk.tutoria
+    # url(r"^", include("users.urls")),l_list_published),
+    path('vue-test', lk.vue_test),
+    # url('', include('social_django.urls', namespace='social')),
+    # url(r'^oauth/', include('social_django.urls', namespace='social')),  # <--
+    # path('login', include('django_github_oauth.urls.login')),
+    # path('accounts/github/login/callback', include('django_github_oauth.urls.callback')),
+    # path('logout', include('django_github_oauth.urls.logout')),
+    url(r'^oauth/', include('social_django.urls', namespace='social'))  # <--
 ]
